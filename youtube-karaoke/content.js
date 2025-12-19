@@ -27,10 +27,10 @@ function getVideoInfo() {
 // Funzione per saltare le pubblicità
 function skipAd() {
   const skipButtons = [
-    '. ytp-ad-skip-button',
+    '.ytp-ad-skip-button',
     '.ytp-ad-skip-button-modern',
     '.ytp-skip-ad-button',
-    'button. ytp-ad-skip-button'
+    'button.ytp-ad-skip-button'
   ];
   
   for (const selector of skipButtons) {

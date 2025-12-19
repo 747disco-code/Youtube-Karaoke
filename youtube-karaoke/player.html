@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Karaoke Player</title>
+  <title>Karaoke Player - Monitor 2</title>
   <style>
     * {
       margin: 0;
@@ -15,96 +15,106 @@
       background: #000;
       color: #fff;
       font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
       height: 100vh;
+      overflow: hidden;
     }
 
     #videoContainer {
-      flex: 1;
-      display:  flex;
-      justify-content:  center;
-      align-items:  center;
-      background: #000;
-    }
-
-    video {
       width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-
-    #controls {
-      background: rgba(0,0,0,0.8);
-      padding: 20px;
+      height: 100vh;
       display: flex;
-      gap: 15px;
       justify-content: center;
       align-items: center;
+      background: #000;
+      position: relative;
     }
 
-    button {
-      padding: 15px 30px;
-      font-size: 18px;
+    iframe {
+      width: 100%;
+      height: 100%;
       border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #667eea;
-      color: white;
-      transition: all 0.3s;
     }
 
-    button:hover {
-      background: #764ba2;
-      transform: scale(1.05);
+    #loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 24px;
+      z-index: 10;
+    }
+
+    #loading.hidden {
+      display: none;
+    }
+
+    .spinner {
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top: 4px solid #fff;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     #title {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
       text-align: center;
-      padding: 20px;
-      background: rgba(102, 126, 234, 0.2);
-      font-size: 24px;
+      padding: 15px 30px;
+      background: rgba(102, 126, 234, 0.9);
+      font-size: 22px;
       font-weight: bold;
+      border-radius: 10px;
+      z-index: 5;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      max-width: 80%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #instructions {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      padding: 10px 20px;
+      background: rgba(0,0,0,0.7);
+      font-size: 14px;
+      border-radius: 8px;
+      z-index: 5;
     }
   </style>
 </head>
 <body>
-  <div id="title">🎤 Karaoke Mode</div>
+  <div id="title">🎤 Karaoke Mode - Monitor 2</div>
   
   <div id="videoContainer">
-    <video id="videoPlayer" controls></video>
+    <div id="loading">
+      <div class="spinner"></div>
+      <div>Caricamento video...</div>
+    </div>
+    <iframe id="youtubePlayer" 
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture" 
+            allowfullscreen>
+    </iframe>
   </div>
 
-  <div id="controls">
-    <button onclick="document.getElementById('videoPlayer').currentTime -= 10">⏪ -10s</button>
-    <button onclick="togglePlay()">▶️ Play/Pause</button>
-    <button onclick="document.getElementById('videoPlayer').currentTime += 10">⏩ +10s</button>
-    <button onclick="toggleFullscreen()">🖥️ Fullscreen</button>
+  <div id="instructions">
+    Premi F11 per la modalità fullscreen | Usa il Control Panel sul primo monitor per i controlli
   </div>
 
-  <script>
-    const video = document.getElementById('videoPlayer');
-    
-    function togglePlay() {
-      if (video.paused) {
-        video.play();
-      } else {
-        video.pause();
-      }
-    }
-
-    function toggleFullscreen() {
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      }
-    }
-
-    // Carica video dall'URL passato
-    const urlParams = new URLSearchParams(window.location.search);
-    const videoUrl = urlParams.get('video');
-    if (videoUrl) {
-      video.src = decodeURIComponent(videoUrl);
-    }
-  </script>
+  <script src="player.js"></script>
 </body>
 </html>

@@ -1,8 +1,8 @@
 {
-  "manifest_version":  3,
-  "name":  "YouTube Karaoke Helper",
-  "version": "2.0.0",
-  "description": "Scarica video YouTube e apri player dual-monitor per karaoke",
+  "manifest_version": 3,
+  "name": "YouTube Karaoke Helper",
+  "version": "3.0.3",
+  "description": "Estensione Chrome per karaoke dual-monitor con YouTube",
   "permissions": [
     "tabs",
     "storage",
@@ -28,7 +28,7 @@
     "default_title": "YouTube Karaoke Helper"
   },
   "web_accessible_resources": [{
-    "resources": ["player.html"],
+    "resources": ["player.html", "control.html", "player.js", "control.js"],
     "matches": ["<all_urls>"]
   }]
 }

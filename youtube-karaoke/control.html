@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Karaoke Control Panel</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    header {
+      background: rgba(0,0,0,0.3);
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .current-song {
+      background: rgba(0,0,0,0.4);
+      padding: 20px;
+      margin: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+    }
+
+    .current-song h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #ffd700;
+    }
+
+    .current-song p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .controls {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(0,0,0,0.3);
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #5dade2 0%, #3498db 100%);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: linear-gradient(135deg, #ec7063 0%, #e74c3c 100%);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background: linear-gradient(135deg, #58d68d 0%, #2ecc71 100%);
+    }
+
+    .playlist-container {
+      flex: 1;
+      overflow-y: auto;
+      margin: 20px;
+      background: rgba(0,0,0,0.3);
+      border-radius: 15px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+    }
+
+    .playlist-container h3 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .playlist-item {
+      background: rgba(255,255,255,0.1);
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .playlist-item:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateX(5px);
+    }
+
+    .playlist-item.playing {
+      background: linear-gradient(135deg, rgba(46, 204, 113, 0.3) 0%, rgba(39, 174, 96, 0.3) 100%);
+      border: 2px solid #2ecc71;
+    }
+
+    .playlist-item-info {
+      flex: 1;
+    }
+
+    .playlist-item-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .playlist-item-channel {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .playlist-item-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .playlist-item-actions button {
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+
+    .empty-playlist {
+      text-align: center;
+      padding: 40px;
+      opacity: 0.7;
+      font-size: 18px;
+    }
+
+    .status-bar {
+      background: rgba(0,0,0,0.4);
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .progress-bar {
+      height: 5px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2ecc71 0%, #3498db 100%);
+      width: 0%;
+      transition: width 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>
+      <span>🎤</span>
+      Karaoke Control Panel
+      <span>🎵</span>
+    </h1>
+    <p>Controllo Principale - Monitor 1</p>
+  </header>
+
+  <div class="current-song" id="currentSong">
+    <h2>In Riproduzione</h2>
+    <p class="playlist-item-title" id="currentTitle">Nessun video in riproduzione</p>
+    <p class="playlist-item-channel" id="currentChannel"></p>
+    <div class="progress-bar">
+      <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-primary" id="prevBtn" disabled>
+      <span>⏮️</span>
+      Precedente
+    </button>
+    <button class="btn-danger" id="playPauseBtn" disabled>
+      <span id="playPauseIcon">▶️</span>
+      <span id="playPauseText">Play</span>
+    </button>
+    <button class="btn-primary" id="nextBtn" disabled>
+      <span>⏭️</span>
+      Successivo
+    </button>
+    <button class="btn-success" id="addSongBtn">
+      <span>➕</span>
+      Aggiungi Canzone
+    </button>
+    <button class="btn-primary" id="clearPlaylistBtn">
+      <span>🗑️</span>
+      Svuota Playlist
+    </button>
+  </div>
+
+  <div class="playlist-container">
+    <h3>
+      <span>📋</span>
+      Playlist
+      <span id="playlistCount">(0 canzoni)</span>
+    </h3>
+    <div id="playlistItems">
+      <div class="empty-playlist">
+        La playlist è vuota. Aggiungi canzoni dalla pagina YouTube!
+      </div>
+    </div>
+  </div>
+
+  <div class="status-bar" id="statusBar">
+    Pronto per il karaoke 🎵
+  </div>
+
+  <script src="control.js"></script>
+</body>
+</html>
