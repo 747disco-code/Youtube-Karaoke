@@ -9,12 +9,6 @@ const loading = document.getElementById('loading');
 const youtubePlayer = document.getElementById('youtubePlayer');
 const titleElement = document.getElementById('title');
 
-// Carica l'API di YouTube IFrame
-const tag = document.createElement('script');
-tag.src = 'https://www.youtube.com/iframe_api';
-const firstScriptTag = document.getElementsByTagName('script')[0];
-firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
 // Callback chiamato quando l'API è pronta
 // Note: This is the official YouTube IFrame API callback name
 window.onYouTubeIframeAPIReady = function() {
