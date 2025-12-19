@@ -16,6 +16,7 @@ const firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
 // Callback chiamato quando l'API è pronta
+// Note: This is the official YouTube IFrame API callback name
 window.onYouTubeIframeAPIReady = function() {
   console.log('✅ YouTube IFrame API pronta');
   isReady = true;
@@ -103,7 +104,7 @@ function requestFullscreen() {
   
   if (elem.requestFullscreen) {
     elem.requestFullscreen().catch(err => {
-      console.log('Fullscreen non disponibile:', err);
+      console.warn('Impossibile attivare fullscreen automaticamente. Premi F11 manualmente.', err.message);
     });
   } else if (elem.webkitRequestFullscreen) {
     elem.webkitRequestFullscreen();

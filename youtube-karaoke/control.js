@@ -297,17 +297,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   return true;
 });
 
-// Ascolta la chiusura del player window
-chrome.windows.onRemoved.addListener(async (windowId) => {
-  if (windowId === playerWindowId) {
-    playerWindowId = null;
-    isPlaying = false;
-    updateControls();
-    updateStatus('⚠️ Player chiuso');
-    await savePlaylist();
-  }
-});
-
 // Inizializzazione
 loadPlaylist();
 updateStatus('🎵 Pronto per il karaoke!');

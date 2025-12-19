@@ -4,7 +4,10 @@ function isValidYouTubeUrl(url) {
   if (!url) return false;
   try {
     const urlObj = new URL(url);
-    return urlObj.hostname === 'www.youtube.com' || urlObj.hostname === 'youtube.com' || urlObj.hostname === 'm.youtube.com';
+    return urlObj.hostname === 'www.youtube.com' || 
+           urlObj.hostname === 'youtube.com' || 
+           urlObj.hostname === 'm.youtube.com' ||
+           urlObj.hostname === 'youtu.be';
   } catch (e) {
     return false;
   }
