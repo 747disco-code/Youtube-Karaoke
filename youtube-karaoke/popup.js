@@ -1,4 +1,15 @@
 // Popup Script v3
+// Helper function to validate YouTube URL
+function isValidYouTubeUrl(url) {
+  if (!url) return false;
+  try {
+    const urlObj = new URL(url);
+    return urlObj.hostname === 'www.youtube.com' || urlObj.hostname === 'youtube.com' || urlObj.hostname === 'm.youtube.com';
+  } catch (e) {
+    return false;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async function() {
   const karaokeBtn = document.getElementById('karaokeBtn');
   const addToPlaylistBtn = document.getElementById('addToPlaylistBtn');
@@ -19,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async function() {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     
-    if (tab.url && tab.url.includes('youtube.com/watch')) {
+    if (isValidYouTubeUrl(tab.url) && tab.url.includes('/watch')) {
       chrome.tabs.sendMessage(tab.id, { action: 'getVideoInfo' }, function(response) {
         if (response && response.success && response.data) {
           currentVideoData = response.data;
@@ -132,7 +143,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
       const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       
-      if (tab.url && tab.url.includes('youtube.com')) {
+      if (isValidYouTubeUrl(tab.url)) {
         chrome.tabs.sendMessage(tab.id, { 
           action: 'toggleAdSkip', 
           enabled: enabled 
