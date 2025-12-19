@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', async function() {
     
     if (isValidYouTubeUrl(tab.url) && tab.url.includes('/watch')) {
       chrome.tabs.sendMessage(tab.id, { action: 'getVideoInfo' }, function(response) {
+        if (chrome.runtime.lastError) {
+          // Ignore connection errors - content script might not be ready
+          console.log('Content script not ready:', chrome.runtime.lastError.message);
+          return;
+        }
         if (response && response.success && response.data) {
           currentVideoData = response.data;
           videoTitle.textContent = response.data.title;
@@ -151,6 +156,10 @@ document.addEventListener('DOMContentLoaded', async function() {
           action: 'toggleAdSkip', 
           enabled: enabled 
         }, function(response) {
+          if (chrome.runtime.lastError) {
+            console.log('Content script not ready:', chrome.runtime.lastError.message);
+            return;
+          }
           if (response && response.success) {
             status.textContent = enabled ? '✅ Blocco pubblicità attivo' : '⏸️ Blocco pubblicità disattivato';
             status.style.color = enabled ? '#2ecc71' : '#ffa502';

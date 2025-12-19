@@ -68,11 +68,28 @@ function renderPlaylist() {
         <div class="playlist-item-channel">📺 ${song.channel}</div>
       </div>
       <div class="playlist-item-actions">
-        <button class="btn-primary" onclick="playSong(${index})">▶️</button>
-        <button class="btn-danger" onclick="removeSong(${index})">❌</button>
+        <button class="btn-primary play-song-btn" data-index="${index}">▶️</button>
+        <button class="btn-danger remove-song-btn" data-index="${index}">❌</button>
       </div>
     </div>
   `).join('');
+  
+  // Add event listeners to the new buttons
+  document.querySelectorAll('.play-song-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const index = parseInt(btn.getAttribute('data-index'));
+      playSong(index);
+    });
+  });
+  
+  document.querySelectorAll('.remove-song-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const index = parseInt(btn.getAttribute('data-index'));
+      removeSong(index);
+    });
+  });
 }
 
 // Aggiorna la visualizzazione della canzone corrente
@@ -225,6 +242,11 @@ addSongBtn.addEventListener('click', async () => {
     
     // Richiedi info video
     chrome.tabs.sendMessage(tab.id, { action: 'getVideoInfo' }, async (response) => {
+      if (chrome.runtime.lastError) {
+        console.error('Content script error:', chrome.runtime.lastError.message);
+        updateStatus('❌ Ricarica la pagina YouTube (F5)');
+        return;
+      }
       if (response && response.success && response.data) {
         const videoData = response.data;
         
@@ -300,9 +322,5 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // Inizializzazione
 loadPlaylist();
 updateStatus('🎵 Pronto per il karaoke!');
-
-// Esponi funzioni globali per gli onclick inline
-window.playSong = playSong;
-window.removeSong = removeSong;
 
 console.log('✅ Control Panel pronto!');
