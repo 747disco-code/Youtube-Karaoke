@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Karaoke Helper</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 350px;
+      padding: 20px;
+      font-family:  'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+    
+    h1 {
+      font-size: 22px;
+      margin-bottom:  20px;
+      text-align: center;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    
+    .emoji {
+      font-size: 28px;
+    }
+    
+    . button {
+      width: 100%;
+      padding: 15px 20px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      font-size:  16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    
+    .karaoke-btn {
+      background: linear-gradient(135deg, #ff4757 0%, #ff6348 100%);
+      color: white;
+    }
+    
+    .karaoke-btn:hover {
+      background: linear-gradient(135deg, #ff6b81 0%, #ff7979 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+
+    .karaoke-btn:active {
+      transform: translateY(0);
+    }
+
+    .karaoke-btn:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .download-btn {
+      background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+      color: white;
+      font-size: 14px;
+      padding: 12px 20px;
+    }
+
+    .download-btn:hover {
+      background: linear-gradient(135deg, #5dade2 0%, #3498db 100%);
+      transform: translateY(-2px);
+    }
+    
+    .toggle-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin:  15px 0;
+      padding: 12px 15px;
+      background: rgba(255,255,255,0.15);
+      border-radius:  10px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .toggle-label {
+      font-size: 14px;
+      font-weight: 500;
+      display:  flex;
+      align-items:  center;
+      gap: 8px;
+    }
+    
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 26px;
+    }
+    
+    .switch input {
+      opacity: 0;
+      width:  0;
+      height: 0;
+    }
+    
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(255,255,255,0.3);
+      transition: . 4s;
+      border-radius: 26px;
+    }
+    
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color:  white;
+      transition: .4s;
+      border-radius:  50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    input:checked + .slider {
+      background-color: #2ecc71;
+    }
+    
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+    
+    .status {
+      text-align: center;
+      margin-top: 15px;
+      padding: 10px;
+      font-size: 13px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .info {
+      margin-top: 15px;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 8px;
+      font-size: 12px;
+      line-height:  1.6;
+    }
+
+    .info strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+
+    . video-info {
+      margin:  15px 0;
+      padding: 12px;
+      background: rgba(255,255,255,0.1);
+      border-radius:  8px;
+      font-size: 12px;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .video-info.show {
+      display: block;
+    }
+
+    .video-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #ffd700;
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    <span class="emoji">🎤</span>
+    YouTube Karaoke
+  </h1>
+  
+  <div class="video-info" id="videoInfo">
+    <div class="video-title" id="videoTitle">Caricamento... </div>
+    <div id="videoChannel"></div>
+  </div>
+
+  <button class="button download-btn" id="downloadBtn">
+    <span class="emoji">💾</span>
+    Scarica Video
+  </button>
+
+  <button class="button karaoke-btn" id="karaokeBtn">
+    <span class="emoji">🖥️</span>
+    Avvia Modalità Karaoke Dual-Monitor
+  </button>
+  
+  <div class="toggle-container">
+    <span class="toggle-label">
+      <span class="emoji">🚫</span>
+      Salta Pubblicità
+    </span>
+    <label class="switch">
+      <input type="checkbox" id="adSkipToggle" checked>
+      <span class="slider"></span>
+    </label>
+  </div>
+  
+  <div class="status" id="status">
+    Pronto per il karaoke!  🎵
+  </div>
+
+  <div class="info">
+    <strong>💡 Come usare:</strong>
+    1. Apri un video YouTube<br>
+    2. <b>OPZIONALE: </b> Clicca "Scarica Video" per salvarlo<br>
+    3. Clicca "Avvia Modalità Karaoke"<br>
+    4. Trascina la finestra fullscreen sul 2° monitor<br>
+    5. Usa il player sul 1° monitor per i controlli
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
