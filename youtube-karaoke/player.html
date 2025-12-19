@@ -105,15 +105,16 @@
       <div class="spinner"></div>
       <div>Caricamento video...</div>
     </div>
-    <iframe id="youtubePlayer" allow="autoplay; fullscreen"></iframe>
+    <iframe id="youtubePlayer" 
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture" 
+            allowfullscreen>
+    </iframe>
   </div>
 
   <div id="instructions">
     Premi F11 per la modalità fullscreen | Usa il Control Panel sul primo monitor per i controlli
   </div>
 
-  <!-- Load YouTube IFrame API -->
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script src="player.js"></script>
 </body>
 </html>
